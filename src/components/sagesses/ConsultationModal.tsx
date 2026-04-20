@@ -28,14 +28,8 @@ const ConsultationModal = ({ consultation, onClose }: Props) => {
 
   const handleSubmit = () => {
     setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setRelevance([50]);
-      setClarity([50]);
-      setDepth([50]);
-      onClose();
-      setView("case");
-    }, 1800);
+    // On reste volontairement sur la fiche du bokônon : pas d'auto-close.
+    // L'utilisateur ferme via la croix ou le clic en dehors quand il le souhaite.
   };
 
   const handleClose = () => {
@@ -162,7 +156,9 @@ const ConsultationModal = ({ consultation, onClose }: Props) => {
               </span>
             </div>
 
-            {/* Swipeable content */}
+            {/* Swipeable content : drag uniquement sur "le cas tiré"
+                pour éviter tout swipe accidentel pendant l'évaluation
+                ou sur la fiche du bokônon */}
             <div className="flex-1 overflow-y-auto">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -171,11 +167,15 @@ const ConsultationModal = ({ consultation, onClose }: Props) => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: view === "bokonon" ? -80 : 80 }}
                   transition={{ duration: 0.3 }}
-                  drag="x"
+                  drag={view === "case" ? "x" : false}
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.25}
-                  onDragEnd={handleDragEnd}
-                  className="touch-pan-y cursor-grab active:cursor-grabbing"
+                  onDragEnd={view === "case" ? handleDragEnd : undefined}
+                  className={
+                    view === "case"
+                      ? "touch-pan-y cursor-grab active:cursor-grabbing"
+                      : "touch-auto"
+                  }
                 >
                   {view === "case" ? (
                     <CaseView photo={casePhoto} consultation={consultation} />
