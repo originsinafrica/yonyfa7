@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
-import { X, Play, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, Play, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import CombinedTrace from "./CombinedTrace";
-import { PROFILE_PHOTOS } from "@/assets/profiles";
+import SegmentedTrack from "./SegmentedTrack";
+import { PROFILE_PHOTOS, PROFILES } from "@/assets/profiles";
 import { type Consultation } from "@/data/consultations";
 
 interface Props {
