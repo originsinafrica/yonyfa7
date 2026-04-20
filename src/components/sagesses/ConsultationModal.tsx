@@ -491,21 +491,103 @@ const BokononView = ({
           </div>
         </div>
       ) : (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center py-8"
-        >
-          <p className="font-headline text-lg" style={{ color: "#00693e" }}>
-            ✦ Votre regard a été reçu.
-          </p>
-          <p className="text-xs mt-2 italic" style={{ color: "#5a5c5c" }}>
-            Chaque évaluation nourrit le discernement collectif.
-          </p>
-        </motion.div>
+        <BokononCard
+          photo={photo}
+          consultation={consultation}
+          relevance={relevance[0]}
+          clarity={clarity[0]}
+          depth={depth[0]}
+        />
       )}
     </div>
   </div>
 );
+
+/* --- View 3 : fiche bokônon après évaluation --- */
+const BokononCard = ({
+  photo,
+  consultation,
+  relevance,
+  clarity,
+  depth,
+}: {
+  photo: string | null;
+  consultation: Consultation;
+  relevance: number;
+  clarity: number;
+  depth: number;
+}) => {
+  // Le profil "réel" attaché à la photo
+  const profile = PROFILES[consultation.videoSeed % PROFILES.length];
+  const reviewsCount = consultation.scores.count;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="pt-5"
+      style={{ borderTop: "1px solid #ececec" }}
+    >
+      <p
+        className="font-label text-[10px] uppercase tracking-[0.2em] font-bold text-center mb-4"
+        style={{ color: "#00693e" }}
+      >
+        ✦ Fiche du bokônon
+      </p>
+
+      <div className="flex items-center gap-3 mb-5">
+        {photo && (
+          <img
+            src={photo}
+            alt={`${profile.firstName} ${profile.lastName}`}
+            className="w-14 h-14 rounded-full object-cover shrink-0"
+            style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}
+            draggable={false}
+          />
+        )}
+        <div className="min-w-0 flex-1">
+          <p
+            className="font-headline text-base font-bold truncate"
+            style={{ color: "#2d2f2f" }}
+          >
+            {profile.firstName} {profile.lastName}
+          </p>
+          <p
+            className="text-[11px] italic truncate"
+            style={{ color: "#5a5c5c" }}
+          >
+            {profile.activity} · {profile.location}
+          </p>
+          <p
+            className="font-label text-[10px] uppercase tracking-[0.15em] mt-0.5"
+            style={{ color: "#00693e" }}
+          >
+            {reviewsCount} avis reçus
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-3 mb-5">
+        <SegmentedTrack label="Pertinence" value={relevance} count={reviewsCount} />
+        <SegmentedTrack label="Clarté" value={clarity} count={reviewsCount} />
+        <SegmentedTrack label="Profondeur" value={depth} count={reviewsCount} />
+      </div>
+
+      <Link
+        to={`/profil/${profile.id}`}
+        className="flex items-center justify-center gap-2 w-full py-3 rounded-md text-sm font-bold uppercase tracking-[0.15em] text-white transition-all hover:scale-[1.01]"
+        style={{
+          background: "#00693e",
+          boxShadow: "0 8px 20px rgba(0, 105, 62, 0.25)",
+        }}
+      >
+        Voir le profil complet
+        <ArrowRight size={16} />
+      </Link>
+    </motion.div>
+  );
+};
+
 
 export default ConsultationModal;
