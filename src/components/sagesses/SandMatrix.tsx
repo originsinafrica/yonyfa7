@@ -10,7 +10,7 @@ import SignDisplay from "./SignDisplay";
 import SwipeableCaseDeck from "./SwipeableCaseDeck";
 import AudioRecorder from "./AudioRecorder";
 import EthnicDots from "./EthnicDots";
-import FaPrimer from "./FaPrimer";
+
 import { useLivingOrder } from "@/hooks/useLivingOrder";
 import {
   AlertDialog,
@@ -301,13 +301,7 @@ const SandMatrix = () => {
                     >
                       Ton choix définitif
                     </p>
-                    <p
-                      className="text-[11px] italic mb-3"
-                      style={{ color: "#5a5c5c" }}
-                    >
-                      Le bokônon doit confirmer son choix avant de s'enregistrer.
-                    </p>
-                    <ul className="space-y-1.5">
+                    <ul className="space-y-1.5 mt-3">
                       {lifeCase.options.map((opt, i) => {
                         const isFinal = finalChoice === i;
                         const wasIntuition = intuitiveChoice === i;
@@ -412,9 +406,6 @@ const SandMatrix = () => {
                       {revealed.signX.name} {revealed.signY.name}
                     </h3>
                   </motion.div>
-
-                  {/* L'essentiel du Fâ — primer */}
-                  <FaPrimer />
 
                   {/* Description */}
                   <div
