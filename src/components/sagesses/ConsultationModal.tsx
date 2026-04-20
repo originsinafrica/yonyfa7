@@ -4,6 +4,7 @@ import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { X, Play, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import CombinedTrace from "./CombinedTrace";
+import DotIdeogram from "./DotIdeogram";
 import SegmentedTrack from "./SegmentedTrack";
 import { PROFILE_PHOTOS, PROFILES } from "@/assets/profiles";
 import { type Consultation } from "@/data/consultations";
@@ -27,14 +28,8 @@ const ConsultationModal = ({ consultation, onClose }: Props) => {
 
   const handleSubmit = () => {
     setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setRelevance([50]);
-      setClarity([50]);
-      setDepth([50]);
-      onClose();
-      setView("case");
-    }, 1800);
+    // On reste volontairement sur la fiche du bokônon : pas d'auto-close.
+    // L'utilisateur ferme via la croix ou le clic en dehors quand il le souhaite.
   };
 
   const handleClose = () => {
@@ -161,7 +156,9 @@ const ConsultationModal = ({ consultation, onClose }: Props) => {
               </span>
             </div>
 
-            {/* Swipeable content */}
+            {/* Swipeable content : drag uniquement sur "le cas tiré"
+                pour éviter tout swipe accidentel pendant l'évaluation
+                ou sur la fiche du bokônon */}
             <div className="flex-1 overflow-y-auto">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -170,11 +167,15 @@ const ConsultationModal = ({ consultation, onClose }: Props) => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: view === "bokonon" ? -80 : 80 }}
                   transition={{ duration: 0.3 }}
-                  drag="x"
+                  drag={view === "case" ? "x" : false}
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.25}
-                  onDragEnd={handleDragEnd}
-                  className="touch-pan-y cursor-grab active:cursor-grabbing"
+                  onDragEnd={view === "case" ? handleDragEnd : undefined}
+                  className={
+                    view === "case"
+                      ? "touch-pan-y cursor-grab active:cursor-grabbing"
+                      : "touch-auto"
+                  }
                 >
                   {view === "case" ? (
                     <CaseView photo={casePhoto} consultation={consultation} />
@@ -321,10 +322,10 @@ const CaseView = ({
           className="rounded-md flex items-center justify-center p-1.5"
           style={{ background: "#f0f1f1" }}
         >
-          <CombinedTrace
-            leftCode={consultation.signY.code}
-            rightCode={consultation.signX.code}
-            size={48}
+          <DotIdeogram
+            leftCode={consultation.signX.code}
+            rightCode={consultation.signY.code}
+            size={56}
             color="#00693e"
           />
         </div>
@@ -349,11 +350,11 @@ const CaseView = ({
           Résonances à explorer
         </p>
         <div className="flex items-center gap-2 text-sm flex-wrap">
-          <span style={{ color: "#00693e" }}>{consultation.signY.value}</span>
-          <span style={{ color: "#fcd116" }}>×</span>
-          <span style={{ color: "#fbd115" }}>{consultation.signX.value}</span>
+          <span style={{ color: "#2d2f2f" }}>{consultation.signY.value}</span>
+          <span style={{ color: "#5a5c5c" }}>×</span>
+          <span style={{ color: "#2d2f2f" }}>{consultation.signX.value}</span>
           <span style={{ color: "#5a5c5c" }}>=</span>
-          <span className="font-bold" style={{ color: "#e8112d" }}>
+          <span className="font-bold" style={{ color: "#2d2f2f" }}>
             {consultation.dynamicWord}
           </span>
         </div>
