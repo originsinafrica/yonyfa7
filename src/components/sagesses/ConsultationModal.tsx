@@ -4,6 +4,7 @@ import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { X, Play, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import CombinedTrace from "./CombinedTrace";
+import DotIdeogram from "./DotIdeogram";
 import SegmentedTrack from "./SegmentedTrack";
 import { PROFILE_PHOTOS, PROFILES } from "@/assets/profiles";
 import { type Consultation } from "@/data/consultations";
@@ -321,10 +322,10 @@ const CaseView = ({
           className="rounded-md flex items-center justify-center p-1.5"
           style={{ background: "#f0f1f1" }}
         >
-          <CombinedTrace
-            leftCode={consultation.signY.code}
-            rightCode={consultation.signX.code}
-            size={48}
+          <DotIdeogram
+            leftCode={consultation.signX.code}
+            rightCode={consultation.signY.code}
+            size={56}
             color="#00693e"
           />
         </div>
@@ -349,11 +350,11 @@ const CaseView = ({
           Résonances à explorer
         </p>
         <div className="flex items-center gap-2 text-sm flex-wrap">
-          <span style={{ color: "#00693e" }}>{consultation.signY.value}</span>
-          <span style={{ color: "#fcd116" }}>×</span>
-          <span style={{ color: "#fbd115" }}>{consultation.signX.value}</span>
+          <span style={{ color: "#2d2f2f" }}>{consultation.signY.value}</span>
+          <span style={{ color: "#5a5c5c" }}>×</span>
+          <span style={{ color: "#2d2f2f" }}>{consultation.signX.value}</span>
           <span style={{ color: "#5a5c5c" }}>=</span>
-          <span className="font-bold" style={{ color: "#e8112d" }}>
+          <span className="font-bold" style={{ color: "#2d2f2f" }}>
             {consultation.dynamicWord}
           </span>
         </div>
