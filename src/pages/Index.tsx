@@ -1,16 +1,71 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import SandMatrix from "@/components/sagesses/SandMatrix";
+import SynchronicityWall from "@/components/sagesses/SynchronicityWall";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+type Tab = "matrice" | "mur";
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: "matrice", label: "Matrice des choix" },
+  { id: "mur", label: "Mur des consultations" },
+];
+
+const Index = () => {
+  const [tab, setTab] = useState<Tab>("matrice");
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background text-foreground">
+      <main className="pt-10 pb-16 px-4 sm:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="max-w-5xl mx-auto"
+        >
+          <div className="text-center mb-8">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl mb-4 text-foreground">
+              Sagesses du Bénin
+            </h1>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex justify-center mb-10">
+            <div className="inline-flex p-1 rounded-full bg-muted border border-border">
+              {TABS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className="relative px-4 sm:px-6 py-2 text-xs sm:text-sm font-medium rounded-full transition-all"
+                  style={{
+                    color:
+                      tab === t.id
+                        ? "hsl(var(--background))"
+                        : "hsl(var(--muted-foreground))",
+                    background:
+                      tab === t.id ? "hsl(var(--foreground))" : "transparent",
+                  }}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={tab}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4 }}
+            >
+              {tab === "matrice" ? <SandMatrix /> : <SynchronicityWall />}
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      </main>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
